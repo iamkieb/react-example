@@ -1,52 +1,37 @@
 import React from "react"
-import { SafeAreaView } from "react-native-safe-area-context"
 import { NavigationContainer } from "@react-navigation/native"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-// import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import ScreenA from "./ScreenA"
-import ScreenB from "./ScreenB"
-import Ionicons from "@expo/vector-icons/Ionicons"
+import { createStackNavigator } from "@react-navigation/stack"
+import Home from "./Home"
+import Login from "./Login"
 
-const Tab = createBottomTabNavigator()
-// const Tab = createMaterialBottomTabNavigator();
-// const Tab = createMaterialTopTabNavigator()
+const Stack = createStackNavigator()
 
 function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, size, color }) => {
-            let iconName
-            if (route.name === "Screen_A") {
-              iconName = "md-checkmark-circle"
-              size = focused ? 25 : 20
-              color = focused ? "#f0f" : "#555"
-            } else if (route.name === "Screen_B") {
-              iconName = "md-checkmark-circle"
-              size = focused ? 25 : 20
-              color = focused ? "#f0f" : "#555"
-            }
-            return <Ionicons name={iconName} size={size} color={color} />
-          },
-        })}
+      <Stack.Navigator
+        initialRouteName="Login"
         screenOptions={{
-          activeTintColor: "#f0f",
-          inactiveTintColor: "#555",
-          activeBackgroundColor: "#fff",
-          inactiveBackgroundColor: "#999",
-          showLabel: true,
-          labelStyle: { fontSize: 14 },
-          showIcon: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "#03d554",
+          },
+          headerTintColor: "#ffffff",
+          headerTitleStyle: {
+            fontSize: 25,
+            fontWeight: "bold",
+          },
         }}
-        activeColor="#f0edf6"
-        inactiveColor="#3e2465"
-        barStyle={{ backgroundColor: "#694fad" }}
       >
-        <Tab.Screen name="Screen_A" component={ScreenA} />
-        <Tab.Screen name="Screen_B" component={ScreenB} />
-      </Tab.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
