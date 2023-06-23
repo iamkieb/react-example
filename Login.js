@@ -1,16 +1,39 @@
 import React, { useState, useEffect } from "react"
 import { View, StyleSheet, Image, Text, TextInput, Alert } from "react-native"
 import CustomButton from "./src/utils/CustomButton.js"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+// import AsyncStorage from "@react-native-async-storage/async-storage"
 import { SafeAreaView } from "react-native-safe-area-context"
+import SQLite from "react-native-sqlite-storage"
+
+const db = SQLite.openDatabase(
+  {
+    name: "MainDB",
+    location: "default",
+  },
+  () => {},
+  (error) => {
+    console.log(error)
+  }
+)
 
 export default function Login({ navigation }) {
   const [name, setName] = useState("")
   const [age, setAge] = useState("")
 
   useEffect(() => {
+    createTable()
     getData()
   }, [])
+
+  const createTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS" +
+          "Users " +
+          "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Age INTEGER);"
+      )
+    })
+  }
 
   const getData = () => {
     try {
@@ -29,11 +52,20 @@ export default function Login({ navigation }) {
       Alert.alert("Warning!", "Please write your data.")
     } else {
       try {
-        var user = {
-          Name: name,
-          Age: age,
-        }
-        await AsyncStorage.setItem("UserData", JSON.stringify(user))
+        // var user = {
+        //     Name: name,
+        //     Age: age
+        // }
+        // await AsyncStorage.setItem('UserData', JSON.stringify(user));
+        await db.transaction(async (tx) => {
+          // await tx.executeSql(
+          //     "INSERT INTO Users (Name, Age) VALUES ('" + name + "'," + age + ")"
+          // );
+          await tx.executeSql("INSERT INTO Users (Name, Age) VALUES (?,?)", [
+            name,
+            age,
+          ])
+        })
         navigation.navigate("Home")
       } catch (error) {
         console.log(error)
@@ -44,7 +76,7 @@ export default function Login({ navigation }) {
   return (
     <SafeAreaView style={styles.body}>
       <Image style={styles.logo} source={require("./assets/favicon.png")} />
-      <Text style={styles.text}>Async Storage</Text>
+      <Text style={styles.text}>SQL Storage</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter your name"
