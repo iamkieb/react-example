@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
+import SQLite from "react-native-sqlite-storage"
 import { View, StyleSheet, Image, Text, TextInput, Alert } from "react-native"
 import CustomButton from "./src/utils/CustomButton.js"
 // import AsyncStorage from "@react-native-async-storage/async-storage"
 import { SafeAreaView } from "react-native-safe-area-context"
-import SQLite from "react-native-sqlite-storage"
 
 const db = SQLite.openDatabase(
   {

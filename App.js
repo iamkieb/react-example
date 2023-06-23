@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import Home from "./Home"
 import Login from "./Login"
+import SQLite from "react-native-sqlite-storage"
 
 const Stack = createStackNavigator()
 
